@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="=en">
 	<head>
 		<meta charset="utf-8" />
 		<title>Form elements - Kuta Admin 2.0.2</title>
@@ -11,7 +11,7 @@
 		<link href="library/assets/css/bootstrap.css" rel="stylesheet" />
 		<link href="library/assets/css/bootstrap-responsive.css" rel="stylesheet" />
 		<link href="library/css/styles.css" rel="stylesheet" />
-		<link rel="stylesheet" type="text/css" href="library/css/jquery.datetimepicker.css"/ >
+		<link rel="stylesheet" type="text/css" href="library/plugins/skin/WdatePicker.css"/ >
 		<style type='text/css'>
 			/* css for timepicker */
 			.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
@@ -45,11 +45,14 @@
 								<h3 class="title">FUNCTION</h3>
 							</div>
 							<form >
+								courseName<input type="text" id="course">
+								</br>
 								start-time
-								<input id="datetimepicker1" type="text" name="starttime" >
+								<input type="text" id="datetimepicker1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="Wdate" style="width:300px"/>
+								<br/>
 								end-time
-								<input id="datetimepicker2" type="text" name="endtime" >
-								<button type="button" class="btn btn-warning" id="datetime">Set Time</button>
+								<input type="text" id="datetimepicker2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="Wdate" style="width:300px"/>
+								<button type="button" class="btn btn-warning" id="datetime">Set Time</button><div id="divdown1"></div> 
 							</form>	
 								<br/>
 							<button type="button" class="btn btn-info" >Export Excel</button>
@@ -85,39 +88,49 @@
 				
 		<!-- plugins loader -->
 		<script src="library/js/loader.js"></script>
-		<script src="library/plugins/jquery.datetimepicker.js"></script>
+		<script src="library/plugins/WdatePicker.js"></script>
 		<script>
-     		$(function(){
-     			var datetime1 = $('#datetimepicker1');
-     			datetime1.datetimepicker({ 
-     			dateFormat:'yy-mm-dd',
-				showSecond: true, //显示秒
-				timeFormat: 'HH:mm:ss',//格式化时间
-				stepHour: 1,//设置步长
-				stepMinute: 1,
-				stepSecond: 1
-    			});
-     		
-     			$('#datetimepicker2').datetimepicker({
-     			lang:'ch'
-     			});
-     		});
-     		
-     		
+		var interval = 1000; 
+		var int = 0;
+	function ShowCountDown(divname) 
+	{ 
+		var now = new Date(); 
+		var endDate = new Date($('#datetimepicker2').val()); 
+		var leftTime=endDate-now; 
+		var leftsecond = parseInt(leftTime/1000); 
+		var day1=Math.floor(leftsecond/(60*60*24)); 
+		var hour=Math.floor((leftsecond-day1*24*60*60)/3600); 
+		var minute=Math.floor((leftsecond-day1*24*60*60-hour*3600)/60); 
+		var second=Math.floor(leftsecond-day1*24*60*60-hour*3600-minute*60); 
+		var cc = document.getElementById(divname); 
+			 if (new Date()>=new Date($('#datetimepicker1').val())){
+			 	if (second==0) window.clearInterval(int);
+					cc.innerHTML = second+"seconds left!"; 
+			}
+	} 
+
+
+
      		$(function(){
      			$("#datetime").click(function(){
      				$.ajax( { 
                         type : "POST", 
                         url : "function/gettime", 
                         async:false,
-                        data : "starttime="+$('#datetimepicker1').val()+"&endtime="+$('#datetimepicker2').val(), 
+                        data : "starttime="+$('#datetimepicker1').val()+"&endtime="+$('#datetimepicker2').val()+"&course="+$('#course').val(), 
                         dataType: "json", 
                         success : function() { 
                             alert("success"); 
+                            int = window.setInterval(function(){ShowCountDown('divdown1');}, interval);
                         } 
                     }); 
      			});
      		});
+     		
+     		
+  
+	
+
   		</script>
 	</body>
 </html>

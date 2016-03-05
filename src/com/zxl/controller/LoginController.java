@@ -27,11 +27,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @since 1.0
  */
 @Controller
-@RequestMapping(value = "/login")
 public class LoginController {
 	@Autowired
 	SessionFactory sessionFactory=null;
-	@RequestMapping
+	@RequestMapping(value = "/login",method = RequestMethod.GET)
+	public String login(){
+		//参数为HttpServletRequest request
+		//System.out.println("用户名:"+request.getParameter("username"));
+		//System.out.println(""+username+""+password);
+		return "/login";
+	}
+	
+	@RequestMapping(value = "/login",method = RequestMethod.POST)
 	public String login(String username,String password){
 		//参数为HttpServletRequest request
 		//System.out.println("用户名:"+request.getParameter("username"));

@@ -31,9 +31,9 @@ public class FunctionController {
 	}
 	@RequestMapping(value="/gettime")
 	@ResponseBody
-	public void getTime(String starttime,String endtime,Model model){
+	public void getTime(String course,String starttime,String endtime,Model model){
 		System.out.println(starttime);
 		System.out.println(endtime);
-		//return false;
+		System.out.println(course);
 	}
 }
